@@ -8,5 +8,8 @@
             "email": "ashkan.codecman.01@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {"phpAPI\\": ""}
+    }
     "require": {}
 }
