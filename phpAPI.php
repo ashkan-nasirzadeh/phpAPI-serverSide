@@ -1,6 +1,6 @@
 <?php
 namespace phpAPI;
-class Test {
+class phpAPI {
     function sayHello () {
         echo 'hello';
     }
