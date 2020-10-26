@@ -1,0 +1,21 @@
+
+-------------LOG-------------
+[23:21:04] Array
+
+-------------LOG-------------
+[23:21:04] SELECT * FROM users WHERE fName LIKE '%oh%' AND sName='farhadi' AND ID='142'
+
+-------------LOG-------------
+[23:21:53] Array
+
+-------------LOG-------------
+[23:21:53] SELECT * FROM users WHERE fName LIKE '%oh%' AND sName='farhadi' AND ID='142'
+
+-------------LOG-------------
+[23:22:22] SELECT * FROM users WHERE fName LIKE '%oh%' AND sName='farhadi' AND ID='142'
+
+-------------LOG-------------
+[23:22:32] SELECT * FROM users WHERE fName LIKE '%oh%' AND sName='farhadi' AND ID='142'
+
+-------------LOG-------------
+[23:52:14] SELECT * FROM users WHERE fName LIKE '%oh%' AND sName='farhadi' AND ID='142'
