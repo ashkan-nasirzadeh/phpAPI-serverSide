@@ -1,6 +1,6 @@
 <?php
 namespace PhpAPI;
-include __DIR__.'/vendor/autoload.php';
+include_once __DIR__.'/../../autoload.php';
 use Monolog\Logger as Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter as LineFormatter;
