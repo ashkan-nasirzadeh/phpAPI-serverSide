@@ -1,6 +1,6 @@
 <?php
 namespace PhpAPI;
-require_once 'JWT.php';
+require_once '/../../autoload.php';
 require_once 'userAPI.php';
 use PhpAPI\UserAPI as UserAPI;
 use PhpAPI\JwtHandler as JwtHandler;
