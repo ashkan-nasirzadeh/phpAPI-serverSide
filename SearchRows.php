@@ -65,8 +65,7 @@ class SearchRows extends CRUD {
                             ],
                             'settings' => $this->settings
                         ];
-                        $this->finalizeOutput($output);
-                        return;
+                        return $this->finalizeOutput($output);
                     }
                 }
             }
@@ -84,8 +83,8 @@ class SearchRows extends CRUD {
                 ],
                 'settings' => $this->settings
             ];
-            $this->finalizeOutput($output);
-        } catch (PDOException $PDOException) {
+            return $this->finalizeOutput($output);
+        } catch (\PDOException $PDOException) {
             echo $PDOException;
         }
     }

@@ -24,6 +24,15 @@ class UserAPI extends \PhpAPI\Router {
         endswitch;
     }
     private function user_addRow () {
+//        $extra = $this->extra;
+//        if (
+//            !isset($extra['id']) ||
+//            empty($extra['id'])
+//        ) {
+//            echo 'Error: not enough args or empty';
+//            return;
+//        }
+//        $ID = $extra['id'];
         require_once 'AddRow.php';
         $serverName = "localhost";
         $uName = "root";
@@ -109,11 +118,21 @@ class UserAPI extends \PhpAPI\Router {
         $deleteRows->deleteRows();
     }
     private function user_uploadPhoto () {
+//        $extra = $this->extra;
+//        $extraDecoded = json_decode($extra, true);
+//        if (
+//            !isset($extraDecoded['id']) ||
+//            empty($extraDecoded['id'])
+//        ) {
+//            echo 'Error: not enough args or empty';
+//            return;
+//        }
+//        $ID = $extraDecoded['id'];
         require_once 'UploadPhoto.php';
         $target_dir = "uploads" . DIRECTORY_SEPARATOR;
         $fileName = 'kia';
         $maxFileSize = '1000000'; //1 MegaByte
-        $settings = ['needJwtValidation' => false, 'addJwt' => true, 'echoOrReturn' => 'echo'];
+        $settings = ['needJwtValidation' => true, 'addJwt' => ['ID' => 1], 'echoOrReturn' => 'echo', 'overwrite' => true];
         $uploadPhoto = new UploadPhoto($target_dir, $fileName, $maxFileSize, $settings);
         $uploadPhoto->uploadPhoto();
     }
@@ -134,5 +153,90 @@ class UserAPI extends \PhpAPI\Router {
         $settings = ['needJwtValidation' => false, 'addJwt' => false, 'echoOrReturn' => 'echo'];
         $CheckColumnHashVerified = new CheckColumnHashVerified($serverName, $uName, $pass, $db, $table, $where, $hashedColumn, $stringFromClientToVerify, $settings);
         $CheckColumnHashVerified->CheckColumnHashVerified();
+    }
+    private function getProductsForAdmin () {
+        $extra = $this->extra;
+        if (
+            !isset($extra['page']) ||
+            !isset($extra['count']) ||
+            empty($extra['page']) ||
+            empty($extra['count'])
+        ) {
+            echo 'Error: not enough args or empty';
+            return;
+        }
+        require_once 'ReadRows_pagination.php';
+        $serverName = $this->serverName;
+        $uName = $this->uName;
+        $pass = $this->pass;
+        $db = $this->db;
+        $table = 'products';
+        $exceptionColumns = [];
+        $where = [];
+        $page = $extra['page'];
+        $count = $extra['count'];
+        $settings = ['needJwtValidation' => false, 'addJwt' => ['ID' => 1], 'echoOrReturn' => 'echo'];
+        $readRows_pagination = new ReadRows_pagination($serverName, $uName, $pass, $db, $table, $where, $exceptionColumns, $page, $count, $settings);
+        $readRows_pagination->readRows_pagination();
+//        $readRows_pagination->getTotalPagesCount();
+//        $readRows_pagination->getLimit();
+//        $readRows_pagination->getTotalPages_return();
+    }
+    private function uploadProductPhoto () {
+        $extra = $this->extra;
+        $extraDecoded = json_decode($extra, true);
+        if (
+            !isset($extraDecoded['id']) ||
+            !isset($extraDecoded['picNum']) ||
+            empty($extraDecoded['id']) ||
+            empty($extraDecoded['picNum'])
+        ) {
+            echo 'Error: not enough args or empty';
+            return;
+        }
+        $ID = $extraDecoded['id'];
+        $picNum = $extraDecoded['picNum'];
+
+        require_once 'UploadPhoto.php';
+//        $target_dir = "C:/xampp/htdocs/dashboard/payelcd_ir shaaboon/uploads" . DIRECTORY_SEPARATOR;
+        $target_dir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . 'products' . DIRECTORY_SEPARATOR;
+        $fileName = 'productID_'.$ID.'_productPicNum_'.$picNum;
+        $maxFileSize = '1000000'; //1 MegaByte
+        $settings = ['needJwtValidation' => true, 'addJwt' => false, 'echoOrReturn' => 'return', 'overwrite' => true];
+        $uploadPhoto = new UploadPhoto($target_dir, $fileName, $maxFileSize, $settings);
+        $result = $uploadPhoto->uploadPhoto();
+        $doesPhotoUploaded = $result['status']['sCode'];
+        if (!$doesPhotoUploaded) {
+            $output = [
+                'output' => [
+                    'success' => false,
+                    'status' => [
+                        'sCode' => 100,
+                        'sMessage' => "file did not upload"
+                    ],
+                    'output' => []
+                ],
+                'settings' => $this->settings
+            ];
+            return $this->finalizeOutput($output);
+        }
+        $imageFormat = $result['status']['format'];
+        require_once 'UpdateRows.php';
+        $serverName = $this->serverName;
+        $uName = $this->uName;
+        $pass = $this->pass;
+        $db = $this->db;
+        $table = 'products';
+        $where = [
+            'ID' => "$ID"
+        ];
+        require_once 'config.php';
+        $columnForAssociatedPic = 'pic' . $picNum;
+        $set = [
+            "$columnForAssociatedPic" => ROOT . "uploads/products/$fileName.$imageFormat"
+        ];
+        $settings = ['needJwtValidation' => true, 'addJwt' => ['ID' => 1], 'echoOrReturn' => 'echo'];
+        $updateRows = new updateRows($serverName, $uName, $pass, $db, $table, $where, $set, $settings);
+        $updateRows->updateRows();
     }
 }

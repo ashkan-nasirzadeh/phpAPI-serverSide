@@ -51,11 +51,8 @@ class DeleteRows extends CRUD {
                 ],
                 'settings' => $this->settings
             ];
-            $output = [
-
-            ];
-            $this->finalizeOutput($output);
-        } catch (PDOException $PDOException) {
+            return $this->finalizeOutput($output);
+        } catch (\PDOException $PDOException) {
             echo $PDOException;
         }
     }
@@ -78,8 +75,8 @@ class DeleteRows extends CRUD {
          * │ debug zone -start │
          * └───────────────────┘
          */
-//        global $log;
-//        $log->warning("$sql");
+//        $log = new Log();
+//        $log->warning($sql);
         /**
          * ┌─────────────────┐
          * │ debug zone -end │

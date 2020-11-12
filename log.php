@@ -7,7 +7,7 @@ use Monolog\Formatter\LineFormatter as LineFormatter;
 class Log {
     public function warning($msg) {
         $log = new Logger('phpAPILoggerChannel');
-        $monolog_streamHandler = new StreamHandler('log.log', Logger::WARNING);
+        $monolog_streamHandler = new StreamHandler('C:/xampp/htdocs/dashboard/payelcd_ir shaaboon/api/vendor/kia_nasirzadeh/phpapi_serverside/log.log', Logger::WARNING);
         $monolog_loggerTimeFormat = 'H:i:s';
         $monolog_formatter = new LineFormatter("\n-------------LOG-------------\n[%datetime%] %message%\n", $monolog_loggerTimeFormat);
         $monolog_streamHandler->setFormatter($monolog_formatter);

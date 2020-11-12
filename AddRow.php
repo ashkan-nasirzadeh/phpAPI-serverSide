@@ -59,26 +59,26 @@ class AddRow extends CRUD {
             return false;
         }
         foreach ($hashedColumnValuePairs as $columnName => $columnValue) {
-            if ($columnName != $lastKey_of_dataToAdd) $sql .= $columnName . ', ';
-            else $sql .= $columnName . ') VALUES (';
+            if ($columnName != $lastKey_of_dataToAdd) $sql .= '`'.$columnName.'`' . ', ';
+            else $sql .= '`'.$columnName.'`' . ') VALUES (';
         }
         foreach ($hashedColumnValuePairs as $columnName => $columnValue) {
             if ($columnName != $lastKey_of_dataToAdd) $sql .= '\'' . $columnValue . '\'' . ', ';
             else $sql .= '\'' . $columnValue . '\'' . ')';
         }
-        return $sql;
         /**
          * ┌───────────────────┐
          * │ debug zone -start │
          * └───────────────────┘
          */
-        //        global $log;
-        //        $log->warning("$sql");
+//        $log = new Log();
+//        $log->warning($sql);
         /**
          * ┌─────────────────┐
          * │ debug zone -end │
          * └─────────────────┘
          */
+        return $sql;
     }
     public function addRow () {
         $settings = $this->settings;
@@ -102,9 +102,21 @@ class AddRow extends CRUD {
                     ],
                     'settings' => $this->settings
                 ];
-                $this->finalizeOutput($output);
-            } catch (PDOException $PDOExceptionError) {
-                echo $sql . "<br>" . $PDOExceptionError->getMessage();
+                return $this->finalizeOutput($output);
+            } catch (\PDOException $PDOExceptionError) {
+                $output = [
+                    'output' => [
+                        'success' => true,
+                        'status' => [
+                            'sCode' => 3,
+                            'sMessage' => 'maybe duplicate value'
+                        ],
+                        'output' => []
+                    ],
+                    'settings' => $this->settings
+                ];
+                return $this->finalizeOutput($output);
+//                echo $sql . "<br>" . $PDOExceptionError->getMessage();
             }
         endif;
     }

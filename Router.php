@@ -15,7 +15,7 @@ class Router {
     }
     public function input_validation ($input) {
         if (!is_array($input)):
-            return trim(htmlspecialchars(stripslashes($input), ENT_QUOTES, 'utf-8'));
+            return trim(htmlspecialchars(stripslashes($input), ENT_NOQUOTES, 'utf-8'));
         else:
 //            return array_walk_recursive($input, [$this, 'stringValidator']);
             array_walk_recursive($input, [$this, "stringValidator"]);

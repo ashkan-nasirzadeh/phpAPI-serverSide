@@ -91,8 +91,8 @@ class CheckColumnHashVerified extends CRUD {
                     ],
                     'settings' => $this->settings
                 ];
-                $this->finalizeOutput($output);
-                return;
+
+                return $this->finalizeOutput($output);
             } else {
                 $doesPassVerified = password_verify($stringFromClientToVerify, $rawRowsToReturn[0][$hashedColumn]);
             }
@@ -107,9 +107,9 @@ class CheckColumnHashVerified extends CRUD {
                 ],
                 'settings' => $this->settings
             ];
-            $this->finalizeOutput($output);
+            return $this->finalizeOutput($output);
 
-        } catch (PDOException $PDOException) {
+        } catch (\PDOException $PDOException) {
             echo $PDOException;
         }
     }

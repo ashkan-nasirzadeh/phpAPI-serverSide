@@ -59,8 +59,8 @@ class UpdateRows extends CRUD {
                 ],
                 'settings' => $this->settings
             ];
-            $this->finalizeOutput($output);
-        } catch (PDOException $PDOException) {
+            return $this->finalizeOutput($output);
+        } catch (\PDOException $PDOException) {
             echo $PDOException;
         }
     }
@@ -70,11 +70,11 @@ class UpdateRows extends CRUD {
         $set = $this->set;
         $where = $this->where;
         $sql = 'UPDATE ';
-        $sql .= $table . ' SET ';
+        $sql .= '`'.$table.'`' . ' SET ';
         $lastKey_of_set = array_key_last($set);
         foreach ($set as $columnName => $columnNewValue) {
-            if ($columnName != $lastKey_of_set) $sql .= $columnName.'=\''.$columnNewValue.'\' AND ';
-            else $sql .= $columnName.'=\''.$columnNewValue.'\'';
+            if ($columnName != $lastKey_of_set) $sql .= '`'.$columnName.'`'.'=\''.$columnNewValue.'\' , ';
+            else $sql .= '`'.$columnName.'`'.'=\''.$columnNewValue.'\'';
         }
 
         if (empty($where) && empty($like)) return $sql;
@@ -82,23 +82,23 @@ class UpdateRows extends CRUD {
 
         $lastKey_of_where = array_key_last($where);
         foreach ($where as $columnName => $columnValue) {
-            if ($columnName != $lastKey_of_where) $sql .= $columnName.'=\''.$columnValue.'\' AND ';
-            else $sql .= $columnName.'=\''.$columnValue.'\'';
+            if ($columnName != $lastKey_of_where) $sql .= '`'.$columnName.'`'.'=\''.$columnValue.'\' AND ';
+            else $sql .= '`'.$columnName.'`'.'=\''.$columnValue.'\'';
         }
         $sql .= ";";
-        return $sql;
         /**
          * ┌───────────────────┐
          * │ debug zone -start │
          * └───────────────────┘
          */
-//        global $log;
-//        $log->warning("$sql");
+//        $log = new Log();
+//        $log->warning($sql);
         /**
          * ┌─────────────────┐
          * │ debug zone -end │
          * └─────────────────┘
          */
+        return $sql;
     }
 }
 

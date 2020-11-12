@@ -19,7 +19,7 @@ function exceptions_error_handler($severity, $message, $filename, $lineno) {
         return;
     }
     if (error_reporting() && $severity) {
-        throw new ErrorException($message, 0, $severity, $filename, $lineno);
+        throw new \ErrorException($message, 0, $severity, $filename, $lineno);
     }
 }
 set_error_handler('PhpAPI\exceptions_error_handler');
@@ -99,23 +99,34 @@ class UploadPhoto extends CRUD {
         }
     }
     public function doesFileAlreadyExists () {
+        $settings = $this->settings;
         $target_file = $this->target_file;
-        if (file_exists($target_file)) {
-            $output = [
-                'output' => [
-                    'success' => false,
-                    'status' => [
-                        'sCode' => 3,
-                        'sMessage' => "a file with same path exists"
-                    ],
-                    'output' => []
-                ],
-                'settings' => $this->settings
-            ];
-            $this->finalizeOutput($output);
-            return false;
+        if ($settings['overwrite'] && file_exists($target_file)) {
+            try {
+                unlink($target_file);
+                return true;
+            } catch (\Exception $e) {
+                echo 'cant unlink existing file maybe permission denied';
+                return false;
+            }
         } else {
-            return true;
+            if (file_exists($target_file)) {
+                $output = [
+                    'output' => [
+                        'success' => false,
+                        'status' => [
+                            'sCode' => 3,
+                            'sMessage' => "a file with same path exists"
+                        ],
+                        'output' => []
+                    ],
+                    'settings' => $this->settings
+                ];
+                $this->finalizeOutput($output);
+                return false;
+            } else {
+                return true;
+            }
         }
     }
     public function isFileSizeOk () {
@@ -182,9 +193,8 @@ class UploadPhoto extends CRUD {
                 ],
                 'settings' => $this->settings
             ];
-            $this->finalizeOutput($output);
-            return;
-        } catch (Exception $e) {
+            return $this->finalizeOutput($output);
+        } catch (\Exception $e) {
             $output = [
             'output' => [
                     'success' => false,
@@ -197,8 +207,7 @@ class UploadPhoto extends CRUD {
                 ],
                 'settings' => $this->settings
             ];
-            $this->finalizeOutput($output);
-            return;
+            return $this->finalizeOutput($output);
         }
     }
 }
