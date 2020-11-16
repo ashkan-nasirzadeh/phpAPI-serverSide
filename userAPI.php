@@ -66,6 +66,75 @@ class UserAPI extends \PhpAPI\Router {
         $readRows = new ReadRows($serverName, $uName, $pass, $db, $table, $where, $exceptionColumns, $settings);
         $readRows->readRows();
     }
+    private function searchProducts_pagination () {
+      $extra = $this->extra;
+      if (
+          !isset($extra['like']) ||
+          !isset($extra['page']) ||
+          !isset($extra['count']) ||
+          empty($extra['like']) ||
+          empty($extra['page']) ||
+          empty($extra['count'])
+
+      ) {
+          echo 'Error: not enough args or empty';
+          return;
+      }
+      $like = $extra['like'];
+      $page = $extra['page'];
+      $count = $extra['count'];
+      require_once 'SearchRowsPagination.php';
+      $serverName = $this->serverName;
+      $uName = $this->uName;
+      $pass = $this->pass;
+      $db = $this->db;
+      $table = 'products';
+      $where = [];
+      $like = [
+          'title' => "$like"
+      ];
+      $exceptionColumns = [];
+      $settings = ['needJwtValidation' => false, 'addJwt' => false, 'echoOrReturn' => 'echo'];
+      $readRows_pagination = new SearchRowsPagination($serverName, $uName, $pass, $db, $table, $where, $like, $exceptionColumns, $page, $count, $settings);
+      $readRows_pagination->readRows_pagination();
+    }
+    private function getProducts () {
+      $extra = $this->extra;
+      if (
+          !isset($extra['page']) ||
+          !isset($extra['count']) ||
+          !isset($extra['subGroup']) ||
+          empty($extra['page']) ||
+          empty($extra['count']) ||
+          empty($extra['subGroup'])
+      ) {
+          echo 'Error: not enough args or empty';
+          return;
+      }
+      require_once 'ReadRows_pagination.php';
+      $serverName = $this->serverName;
+      $uName = $this->uName;
+      $pass = $this->pass;
+      $db = $this->db;
+      $table = 'products';
+      $exceptionColumns = [];
+      $page = $extra['page'];
+      $count = $extra['count'];
+      $subGroup = $extra['subGroup'];
+      if ($subGroup == 'all') {
+          $where = [];
+      } else {
+          $where = [
+              'subGroup' => "$subGroup"
+          ];
+      }
+      $settings = ['needJwtValidation' => false, 'addJwt' => false, 'echoOrReturn' => 'echo'];
+      $readRows_pagination = new ReadRows_pagination($serverName, $uName, $pass, $db, $table, $where, $exceptionColumns, $page, $count, $settings);
+      $readRows_pagination->readRows_pagination();
+//        $readRows_pagination->getTotalPagesCount();
+//        $readRows_pagination->getLimit();
+//        $readRows_pagination->getTotalPages_return();
+  }
     private function user_searchRows () {
         require_once 'SearchRows.php';
         $serverName = "localhost";
