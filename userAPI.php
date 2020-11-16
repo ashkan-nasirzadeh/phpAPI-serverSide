@@ -67,36 +67,36 @@ class UserAPI extends \PhpAPI\Router {
         $readRows->readRows();
     }
     private function searchProducts_pagination () {
-      $extra = $this->extra;
-      if (
-          !isset($extra['like']) ||
-          !isset($extra['page']) ||
-          !isset($extra['count']) ||
-          empty($extra['like']) ||
-          empty($extra['page']) ||
-          empty($extra['count'])
+        $extra = $this->extra;
+        if (
+            !isset($extra['like']) ||
+            !isset($extra['page']) ||
+            !isset($extra['count']) ||
+            empty($extra['like']) ||
+            empty($extra['page']) ||
+            empty($extra['count'])
 
-      ) {
-          echo 'Error: not enough args or empty';
-          return;
-      }
-      $like = $extra['like'];
-      $page = $extra['page'];
-      $count = $extra['count'];
-      require_once 'SearchRowsPagination.php';
-      $serverName = $this->serverName;
-      $uName = $this->uName;
-      $pass = $this->pass;
-      $db = $this->db;
-      $table = 'products';
-      $where = [];
-      $like = [
-          'title' => "$like"
-      ];
-      $exceptionColumns = [];
-      $settings = ['needJwtValidation' => false, 'addJwt' => false, 'echoOrReturn' => 'echo'];
-      $readRows_pagination = new SearchRowsPagination($serverName, $uName, $pass, $db, $table, $where, $like, $exceptionColumns, $page, $count, $settings);
-      $readRows_pagination->readRows_pagination();
+        ) {
+            echo 'Error: not enough args or empty';
+            return;
+        }
+        $like = $extra['like'];
+        $page = $extra['page'];
+        $count = $extra['count'];
+        require_once 'SearchRows_Pagination.php';
+        $serverName = $this->serverName;
+        $uName = $this->uName;
+        $pass = $this->pass;
+        $db = $this->db;
+        $table = 'products';
+        $where = [];
+        $like = [
+            'title' => "$like"
+        ];
+        $exceptionColumns = [];
+        $settings = ['needJwtValidation' => false, 'addJwt' => false, 'echoOrReturn' => 'echo'];
+        $SearchRows_Pagination = new SearchRows_Pagination($serverName, $uName, $pass, $db, $table, $where, $like, $exceptionColumns, $page, $count, $settings);
+        $SearchRows_Pagination->searchRows_Pagination();
     }
     private function getProducts () {
       $extra = $this->extra;
