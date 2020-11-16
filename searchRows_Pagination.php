@@ -13,7 +13,7 @@ require_once 'CRUD.php';
 use PhpAPI\CRUD as CRUD;
 use PDO;
 use PhpAPI\Log as Log;
-class SearchRowsPagination extends CRUD {
+class SearchRows_Pagination extends CRUD {
     private $serverName;
     private $uName;
     private $pass;
@@ -38,7 +38,7 @@ class SearchRowsPagination extends CRUD {
         $this->count = $count;
         $this->settings = $settings;
     }
-    public function readRows_pagination() {
+    public function searchRows_Pagination() {
         $settings = $this->settings;
         if (isset($settings['needJwtValidation']) && $settings['needJwtValidation']) {
             if(!$this->checkJwt()) return;
