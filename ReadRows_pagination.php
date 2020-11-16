@@ -63,7 +63,8 @@ class ReadRows_pagination extends CRUD {
                             ],
                             'settings' => $this->settings
                         ];
-                        return $this->finalizeOutput($output);
+                        $this->finalizeOutput($output);
+                        return;
                     }
                 }
             }
@@ -83,7 +84,7 @@ class ReadRows_pagination extends CRUD {
                 'settings' => $this->settings
             ];
             return $this->finalizeOutput($output);
-        } catch (\PDOException $PDOException) {
+        } catch (PDOException $PDOException) {
             echo $PDOException;
         }
     }
@@ -128,7 +129,16 @@ class ReadRows_pagination extends CRUD {
     }
     public function getTotalRows_echo() {
         $table = $this->table;
+        $where = $this->where;
         $sql = 'SELECT COUNT(*) FROM ' . $table;
+        if (!empty($where)) {
+            $sql .= ' WHERE ';
+            $lastKey_of_where = array_key_last($where);
+            foreach ($where as $columnName => $columnValue) {
+                if ($columnName != $lastKey_of_where) $sql .= $columnName.'=\''.$columnValue.'\' AND ';
+                else $sql .= $columnName.'=\''.$columnValue.'\'';
+            }
+        }
         $conn = $this->makeConn($this->serverName, $this->uName, $this->pass, $this->db);
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -137,7 +147,16 @@ class ReadRows_pagination extends CRUD {
     }
     public function getTotalRows_return() {
         $table = $this->table;
+        $where = $this->where;
         $sql = 'SELECT COUNT(*) FROM ' . $table;
+        if (!empty($where)) {
+            $sql .= ' WHERE ';
+            $lastKey_of_where = array_key_last($where);
+            foreach ($where as $columnName => $columnValue) {
+                if ($columnName != $lastKey_of_where) $sql .= $columnName.'=\''.$columnValue.'\' AND ';
+                else $sql .= $columnName.'=\''.$columnValue.'\'';
+            }
+        }
         $conn = $this->makeConn($this->serverName, $this->uName, $this->pass, $this->db);
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -146,7 +165,16 @@ class ReadRows_pagination extends CRUD {
     }
     public function getTotalPages_return() {
         $table = $this->table;
+        $where = $this->where;
         $sql = 'SELECT COUNT(*) FROM ' . $table;
+        if (!empty($where)) {
+            $sql .= ' WHERE ';
+            $lastKey_of_where = array_key_last($where);
+            foreach ($where as $columnName => $columnValue) {
+                if ($columnName != $lastKey_of_where) $sql .= $columnName.'=\''.$columnValue.'\' AND ';
+                else $sql .= $columnName.'=\''.$columnValue.'\'';
+            }
+        }
         $conn = $this->makeConn($this->serverName, $this->uName, $this->pass, $this->db);
         $stmt = $conn->prepare($sql);
         $stmt->execute();
