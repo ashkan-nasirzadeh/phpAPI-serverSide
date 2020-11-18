@@ -12,6 +12,7 @@ to do:
 where = [
 'a' => '=##ali',
 'b' => '!=##gholi',
-'c' => '>##10'
+'c' => '>##10',
+'d' => 'LIKE##%asghar%'
 ]
-and wherenot should delete
+and `wherenot` and `like` should delete
