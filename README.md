@@ -9,10 +9,13 @@ composer require kia_nasirzadeh/phpapi_serverside
 
 to do:
 `where` should be like this:
-where = [
-'a' => '=##ali',
-'b' => '!=##gholi',
-'c' => '>##10',
-'d' => 'LIKE##%asghar%'
+where_and = [
+'a' => '=#ali',
+'b' => '!=#gholi',
+'c' => '>#10',
+'d' => 'LIKE#%asghar%'
+]
+where_or = [
+'a' => '=#ali'
 ]
 and `wherenot` and `like` should delete
