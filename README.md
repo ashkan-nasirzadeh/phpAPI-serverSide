@@ -22,3 +22,5 @@ where_or = [
 ]
 
 and `wherenot` and `like` should delete
+
+add `min`, `max` date to readRowsPagination and readRows
