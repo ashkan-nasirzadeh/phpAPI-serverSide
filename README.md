@@ -28,3 +28,5 @@ add `min`, `max` date to readRowsPagination and readRows
 in `addRow` we need `lastInsertedID` in answer
 
 terminate JWT
+
+make JWT just one time usage
