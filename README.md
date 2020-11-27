@@ -30,3 +30,5 @@ in `addRow` we need `lastInsertedID` in answer
 terminate JWT
 
 make JWT just one time usage
+
+readRows from last
